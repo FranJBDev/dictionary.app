@@ -38,12 +38,12 @@ words.map( e => {
 
 // Raiz
 router.get('/', (req, res) => {
-    res.json(json)
+    res.status(200).json(json)
 })
 
 router.get('/def/:word', async (req, res) => {
     const word = req.params.word
-    res.json({
+    res.status(200).json({
         [word]: await raeDefs(word)
     })
 })
@@ -54,9 +54,12 @@ router.get('/get/:letters', (req, res) => {
         return e.length == letters
     })
 
-    res.json({
+    if (result.length) res.status(200).json({
         result
-    })
+    }) 
+    else {
+        res.status(404).send("No hay palabras de ese tamaño")
+    }
 })
 
 module.exports = router
