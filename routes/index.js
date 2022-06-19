@@ -48,4 +48,15 @@ router.get('/def/:word', async (req, res) => {
     })
 })
 
+router.get('/get/:letters', (req, res) => {
+    const letters = req.params.letters
+    const result = json.filter(e => {
+        return e.length == letters
+    })
+
+    res.json({
+        result
+    })
+})
+
 module.exports = router
