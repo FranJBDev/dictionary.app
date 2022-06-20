@@ -4,6 +4,7 @@ const { RAE } = require('rae-api');
 const rae = new RAE(true);
 
 const words = require('../dict')
+
 const json = []
 const raeDefs = async (e) => {
     try {
@@ -31,28 +32,25 @@ const raeDefs = async (e) => {
 
 words.map( e => { 
     json.push({
-        word: e,
-        length: e.length,
+        word: e.w,
+        group: e.g,
+        gn: e.n,
+        length: e.w.length,
     })
 })
 
 // Raiz
 router.get('/', (req, res) => {
-    res.status(200).json(json)
-})
+    const len = req.query.len
+    const limit = req.query.limit
+    const gen = req.query.gen
+    const num = req.query.num
+    let result = json
 
-router.get('/def/:word', async (req, res) => {
-    const word = req.params.word
-    res.status(200).json({
-        [word]: await raeDefs(word)
-    })
-})
-
-router.get('/get/:letters', (req, res) => {
-    const letters = req.params.letters
-    const result = json.filter(e => {
-        return e.length == letters
-    })
+    if (len) result = result.filter( e => e.length == len )
+    if (gen) result = result.filter( e => e.gn.includes(gen.toUpperCase()))
+    if (num) result = result.filter( e => e.gn.includes(num.toUpperCase()))
+    if (limit) result = result.slice(0, limit)
 
     if (result.length) res.status(200).json({
         result
@@ -60,6 +58,13 @@ router.get('/get/:letters', (req, res) => {
     else {
         res.status(404).send("No hay palabras de ese tamaño")
     }
+})
+
+router.get('/def/:word', async (req, res) => {
+    const word = req.params.word
+    res.status(200).json({
+        [word]: await raeDefs(word)
+    })
 })
 
 module.exports = router
