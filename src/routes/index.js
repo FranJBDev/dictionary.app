@@ -35,7 +35,7 @@ words.map( (e, i) => {
         id: i,
         word: e.w,
         group: e.g,
-        gn: e.n,
+        genderNumber: e.n,
         length: e.w.length,
     })
 })
@@ -47,12 +47,12 @@ router.get('/', (req, res) => {
     const gen = req.query.gen
     const num = req.query.num
     const group = req.query.group
-    const start = req.query.start
+    let start = req.query.start
     let result = json
 
     if (len) result = result.filter( e => e.length == len )
-    if (gen) result = result.filter( e => e.gn.includes(gen.toUpperCase()))
-    if (num) result = result.filter( e => e.gn.includes(num.toUpperCase()))
+    if (gen) result = result.filter( e => e.genderNumber.includes(gen.toUpperCase()))
+    if (num) result = result.filter( e => e.genderNumber.includes(num.toUpperCase()))
     if (group) result = result.filter( e => e.group.includes(group.toUpperCase()))
     if (!start) start = 0
     if (limit) result = result.slice(start, start + limit)
