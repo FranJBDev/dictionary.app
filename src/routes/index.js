@@ -30,8 +30,9 @@ const raeDefs = async (e) => {
     }
 }
 
-words.map( e => { 
+words.map( (e, i) => { 
     json.push({
+        id: i,
         word: e.w,
         group: e.g,
         gn: e.n,
@@ -45,12 +46,16 @@ router.get('/', (req, res) => {
     const limit = req.query.limit
     const gen = req.query.gen
     const num = req.query.num
+    const group = req.query.group
+    const start = req.query.start
     let result = json
 
     if (len) result = result.filter( e => e.length == len )
     if (gen) result = result.filter( e => e.gn.includes(gen.toUpperCase()))
     if (num) result = result.filter( e => e.gn.includes(num.toUpperCase()))
-    if (limit) result = result.slice(0, limit)
+    if (group) result = result.filter( e => e.group.includes(group.toUpperCase()))
+    if (!start) start = 0
+    if (limit) result = result.slice(start, start + limit)
 
     if (result.length) res.status(200).json(result) 
     else {
