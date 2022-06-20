@@ -52,11 +52,9 @@ router.get('/', (req, res) => {
     if (num) result = result.filter( e => e.gn.includes(num.toUpperCase()))
     if (limit) result = result.slice(0, limit)
 
-    if (result.length) res.status(200).json({
-        result
-    }) 
+    if (result.length) res.status(200).json(result) 
     else {
-        res.status(404).send("No hay palabras de ese tamaño")
+        res.status(404).send("La consulta no arroja resultados")
     }
 })
 
@@ -65,6 +63,14 @@ router.get('/def/:word', async (req, res) => {
     res.status(200).json({
         [word]: await raeDefs(word)
     })
+})
+
+router.get('/getGroups', (req, res) => {
+    let result = []
+    json.forEach( e => {
+        if (!result.includes(e.group)) result.push(e.group)
+    })
+    if (result.length) res.status(200).json(result) 
 })
 
 module.exports = router
