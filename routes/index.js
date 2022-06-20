@@ -73,4 +73,8 @@ router.get('/getGroups', (req, res) => {
     if (result.length) res.status(200).json(result) 
 })
 
+router.get('/getTotal', (req, res) => {
+    if (json.length) res.status(200).json(json.length + ' palabras en la Base de datos') 
+})
+
 module.exports = router
